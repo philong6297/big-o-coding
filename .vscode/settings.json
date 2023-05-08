@@ -24,6 +24,7 @@
   },
   "cmake.configureSettings": {
     "CMAKE_EXPORT_COMPILE_COMMANDS": true,
+    "CMAKE_MAKE_PROGRAM": "C:/Users/longlp/scoop/shims/ninja.exe"
   },
   "cmake.useCMakePresets": "auto",
   "files.watcherExclude": {

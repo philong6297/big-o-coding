@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(main_dirs topological_sort/topological_sorting topological_sort/hierarchy
               topological_sort/fox_and_names topological_sort/kings_path
+              topological_sort/beverages
 )
 foreach(dir IN LISTS main_dirs)
   string(REPLACE "/" "_" target_name ${dir})
