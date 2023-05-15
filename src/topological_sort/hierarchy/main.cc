@@ -10,6 +10,8 @@ namespace {
 using namespace std;
 }    // namespace
 
+// TODO(longlp, review);
+
 auto main() -> int32_t {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
@@ -38,38 +40,35 @@ auto main() -> int32_t {
     });
   }
 
-  auto main_boss = -1;
-  for (auto stud_id = 0; stud_id < N; ++stud_id) {
-    if (indegree[stud_id] == 0) {
-      if (main_boss == -1) {
-        main_boss = stud_id;
-      }
-      else {
-        ++indegree[stud_id];
-        wishes_for_stud[main_boss].emplace_back(stud_id);
-      }
+  queue<int32_t> q{};
+
+  for (auto i = 0; i < N; ++i) {
+    if (indegree[i] == 0) {
+      q.emplace(i);
     }
   }
 
-  queue<int32_t> q{};
-  q.emplace(main_boss);
+  vector<int32_t> direct_boss(N, 0);
 
-  vector<int32_t> direct_boss(N, -1);
+  auto previous_boss = 0;
 
   while (!q.empty()) {
     const auto current_boss = q.front();
     q.pop();
 
+    direct_boss[current_boss] = previous_boss;
+    previous_boss             = current_boss + 1;
+
     for (const auto sub : wishes_for_stud[current_boss]) {
       --indegree[sub];
       if (indegree[sub] == 0) {
         q.emplace(sub);
-        direct_boss[sub] = current_boss;
       }
     }
   }
 
-  for (auto stud_id = 0; stud_id < N; ++stud_id) {
-    cout << direct_boss[stud_id] + 1 << endl;
-  }
+  copy(
+    direct_boss.begin(),
+    direct_boss.end(),
+    ostream_iterator<int32_t>(cout, "\n"));
 }

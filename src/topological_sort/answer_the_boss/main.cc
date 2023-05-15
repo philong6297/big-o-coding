@@ -4,6 +4,16 @@
 
 namespace {
 using namespace std;
+
+struct Employee {
+  int32_t rank{0};
+  int32_t id{0};
+
+  // smaller ranking means larger level
+  friend auto operator<(const Employee& a, const Employee& b) -> bool {
+    return a.rank == b.rank ? a.id > b.id : a.rank > b.rank;
+  }
+};
 }    // namespace
 
 auto main() -> int32_t {
@@ -26,17 +36,29 @@ auto main() -> int32_t {
       int32_t higher{0};
       int32_t lower{0};
       cin >> lower >> higher;
-      --lower;
-      --higher;
 
       relations[higher].emplace_back(lower);
       ++indegree[lower];
     }
 
-    priority_queue<int32_t, vector<int32_t>, greater<>> queue{};
+    priority_queue<Employee> q{};
     for (auto i = 0; i < N; ++i) {
       if (indegree[i] == 0) {
-        queue.push(i);
+        q.push({1, i});
+      }
+    }
+
+    cout << "Scenario #" << test_case << ":\n";
+    while (!q.empty()) {
+      const auto current_boss = q.top();
+      q.pop();
+      cout << current_boss.rank << " " << current_boss.id << "\n";
+
+      for (auto bullied_one : relations[current_boss.id]) {
+        --indegree[bullied_one];
+        if (indegree[bullied_one] == 0) {
+          q.push({current_boss.rank + 1, bullied_one});
+        }
       }
     }
   }
